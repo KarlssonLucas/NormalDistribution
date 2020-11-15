@@ -7,7 +7,7 @@ from time import sleep
 def create_falling_balls(space, pos):
     body = pymunk.Body(1, 100, body_type=pymunk.Body.DYNAMIC)
     body.position = pos
-    shape = pymunk.Circle(body, 5)
+    shape = pymunk.Circle(body, 4)
     space.add(body, shape)
     return shape
 
@@ -16,7 +16,7 @@ def draw_fb(fbs):
     for fb in fbs:
         pos_x = int(fb.body.position.x)
         pos_y = int(fb.body.position.y)
-        pygame.draw.circle(screen, (0, 0, 0), (pos_x, pos_y), 5)
+        pygame.draw.circle(screen, (0, 0, 0), (pos_x, pos_y), 4)
 
 
 def static_ball(space, pos):
@@ -85,9 +85,9 @@ def create_align():
 
 def start_balls():
     pos = 1
-    for i in range(0, 1000):
+    for i in range(0, 700):
         pos *= -1
-        fballs.append(create_falling_balls(space, (400 + 5*pos, 20-i)))
+        fballs.append(create_falling_balls(space, (400, 20)))
         pos += 1
 
 
@@ -100,7 +100,8 @@ pygame.init()
 screen = pygame.display.set_mode((800, 800))
 clock = pygame.time.Clock()
 space = pymunk.Space()
-space.gravity = (0, 250)
+space.gravity = (0, 500)
+space.friction = 0.5
 fballs = []
 create_sides()
 create_align()
@@ -143,6 +144,13 @@ for i in range(0, 26):
 for i in range(0, 25):
     balls.append(static_ball(space, (40 + 30 * i, 575)))
 
+
+for i in range(0,300):
+    balls.append(static_ball(space,(400+i,200-i)))
+
+
+for i in range(0,300):
+    balls.append(static_ball(space,(370-i, 200-i)))
 
 board = [create_board(space)]
 start_balls()
