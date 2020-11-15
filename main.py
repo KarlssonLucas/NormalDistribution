@@ -84,11 +84,16 @@ def create_align():
 
 
 def start_balls():
+    pos = 1
     for i in range(0, 1000):
-        if i % 2 == 0:
-            fballs.append(create_falling_balls(space, (400, 20)))
-        else:
-            fballs.append(create_falling_balls(space, (400, -2000)))
+        pos *= -1
+        fballs.append(create_falling_balls(space, (400 + 5*pos, 20-i)))
+        pos += 1
+
+
+def start_pillars():
+    for i in range(75, 725, 50):
+        create_pillar(space, (i, 800))
 
 
 pygame.init()
@@ -99,9 +104,6 @@ space.gravity = (0, 250)
 fballs = []
 create_sides()
 create_align()
-
-for i in range(75, 725, 50):
-    create_pillar(space, (i, 800))
 
 # EXTREMELY UGLY BUT TO TIRED TO COME UP WITH A SMARTER WAY #
 balls = []
@@ -132,9 +134,19 @@ for i in range(0, 25):
 for i in range(0, 26):
     balls.append(static_ball(space, (25 + 30 * i, 500)))
 
-board = [create_board(space)]
+for i in range(0, 25):
+    balls.append(static_ball(space, (40 + 30 * i, 525)))
 
+for i in range(0, 26):
+    balls.append(static_ball(space, (25 + 30 * i, 550)))
+
+for i in range(0, 25):
+    balls.append(static_ball(space, (40 + 30 * i, 575)))
+
+
+board = [create_board(space)]
 start_balls()
+start_pillars()
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -144,6 +156,7 @@ while True:
     screen.fill((217, 217, 217))
     draw_static_ball(balls)
     draw_fb(fballs)
+    create_align()
     space.step(1 / 50)
     pygame.display.update()
     clock.tick(120)
